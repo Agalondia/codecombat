@@ -22,27 +22,28 @@ describe 'CreateAccountModal', ->
     
     it '(demo)', ->
       jasmine.demoModal(modal)
-      modal.$('form')[0].reset()
+      modal.$('form').each (i, el) -> el.reset()
       forms.objectToForm(modal.$el, { email: 'some@email.com', password: 'xyzzy' })
-      modal.$('#signup-button').click()
+      modal.$('form:first').submit()
     
     it 'fails if nothing is in the form', ->
-      modal.$('form')[0].reset()
-      modal.$('#signup-button').click()
+      modal.$('form').each (i, el) -> el.reset()
+      modal.$('form:first').submit()
       expect(jasmine.Ajax.requests.all().length).toBe(0)
       expect(modal.$el.has('.has-warning').length).toBeTruthy()
     
     it 'fails if email is missing', ->
-      modal.$('form')[0].reset()
+      modal.$('form').each (i, el) -> el.reset()
       forms.objectToForm(modal.$el, { name: 'Name', password: 'xyzzy' })
-      modal.$('#signup-button').click()
+      modal.$('form:first').submit()
       expect(jasmine.Ajax.requests.all().length).toBe(0)
       expect(modal.$el.has('.has-warning').length).toBeTruthy()
 
     it 'signs up if only email and password is provided', ->
-      modal.$('form')[0].reset()
+      jasmine.demoModal(modal)
+      modal.$('form').each (i, el) -> el.reset()
       forms.objectToForm(modal.$el, { email: 'some@email.com', password: 'xyzzy' })
-      modal.$('#signup-button').click()
+      modal.$('form:first').submit()
       requests = jasmine.Ajax.requests.all()
       expect(requests.length).toBe(1)
       expect(modal.$el.has('.has-warning').length).toBeFalsy()
@@ -106,7 +107,7 @@ describe 'CreateAccountModal', ->
         
       describe 'and the user finishes signup', ->
         beforeEach ->
-          modal.$('#signup-button').click()
+          modal.$('form:first').submit()
 
         it '(demo)', ->
           modal.render = _.noop
@@ -178,7 +179,7 @@ describe 'CreateAccountModal', ->
 
       describe 'and the user finishes signup', ->
         beforeEach ->
-          modal.$('#signup-button').click()
+          modal.$('form:first').submit()
 
         it '(demo)', ->
           modal.render = _.noop
